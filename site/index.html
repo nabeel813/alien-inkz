@@ -117,6 +117,17 @@ footer .mega{font:400 clamp(40px,16vw,300px)/.8 Georgia,serif;white-space:nowrap
 .phead p{color:var(--mute);max-width:520px;margin-top:20px;line-height:1.7}
 .pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:22px;margin:8vh 0}
 .pgrid .card{flex:none;width:100%}
+/* LOADER: dot drops -> "!" -> letters tumble out -> morph into ALIEN INKZ */
+#loader{position:fixed;inset:0;z-index:1000;background:#030303;overflow:hidden;cursor:default;font-size:min(11.5vw,150px);animation:ldFail .01s 14s forwards}
+@keyframes ldFail{to{opacity:0;visibility:hidden;pointer-events:none}}
+#loader.out{opacity:0;visibility:hidden;pointer-events:none;transition:opacity .6s ease .1s,visibility 0s .75s}
+.ld-glow{position:absolute;left:50%;top:50%;width:140vmin;height:140vmin;margin:-70vmin 0 0 -70vmin;border-radius:50%;background:radial-gradient(closest-side,rgba(255,255,255,.2),rgba(255,255,255,.07) 55%,transparent);opacity:.45;pointer-events:none}
+.ld-stage{position:absolute;left:50%;top:50%;width:0;height:0;transition:transform .7s cubic-bezier(.6,0,.2,1)}
+#loader.out .ld-stage{transform:translateY(-16px) scale(1.05)}
+.ld-dot{position:absolute;left:0;top:0;width:.15em;height:.15em;margin:-.075em 0 0 -.075em;border-radius:50%;background:#fff;opacity:0;box-shadow:0 0 .35em rgba(255,255,255,.55)}
+.ld-word{position:absolute;left:0;top:0;display:flex;transform:translate(-50%,-50%);font:900 1em/.72 Inter,"Helvetica Neue",Helvetica,Arial,sans-serif;letter-spacing:-.03em;white-space:pre}
+.ld-ch{position:relative;display:block;height:.72em;flex:none}
+.ld-g{position:absolute;left:0;top:-.05em;display:block;padding:.05em 0;white-space:pre;color:transparent;background:linear-gradient(180deg,#fff 10%,#8e9298 100%);-webkit-background-clip:text;background-clip:text;will-change:transform,opacity}
 /* ===== BASE RULES FOR NEW PARTS (desktop) ===== */
 #vhp{position:fixed;left:0;top:0;width:1px;height:100vh;height:100svh;visibility:hidden;pointer-events:none}
 .brand,#burger,#menu{display:none}
@@ -258,24 +269,88 @@ footer .mega{font:400 clamp(40px,16vw,300px)/.8 Georgia,serif;white-space:nowrap
  .wk-tx{left:20px;right:20px;width:auto;top:auto;bottom:11vh}
  #wkinfo{margin:0 20px 70px}
 }
-/* INTRO */
-#intro{position:fixed;inset:0;z-index:90;background:#050404;display:grid;place-items:center;overflow:hidden;cursor:pointer;-webkit-mask-composite:source-in;mask-composite:intersect}
-#intro *{cursor:pointer}
-#intro .gl{position:absolute;left:50%;top:50%;width:min(94vw,1000px);transform:translate(-50%,-50%);filter:url(#rough) drop-shadow(0 0 7px #d23b2f88);transition:opacity .5s,filter .7s,transform .8s var(--ease)}
-#intro .gl path{fill:none;stroke:var(--bone);stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1}
-#intro .gl.off{opacity:0;transform:translate(-50%,-50%) scale(.6);filter:blur(10px)}
-.iw{position:relative;display:flex;font:400 clamp(40px,11vw,190px)/1 Georgia,serif;letter-spacing:-.04em;color:var(--bone)}
-.iw span{display:inline-block;opacity:0;filter:blur(16px);transform:translateY(50px) scale(1.25);transition:all .7s var(--ease)}
-.iw span.on{opacity:1;filter:none;transform:none}
-.isub{position:absolute;top:calc(50% + clamp(50px,8vw,130px));left:0;right:0;text-align:center;font-size:12px;letter-spacing:.4em;text-transform:uppercase;color:var(--red);opacity:0;transition:opacity .8s}
-.isub.on{opacity:1}
-.idrop{position:absolute;left:50%;top:0;width:18px;height:26px;margin-left:-9px;background:var(--red);border-radius:50% 50% 50% 50%/62% 62% 38% 38%;box-shadow:0 0 26px #d23b2f}
-.irip{position:absolute;left:50%;top:50%;width:40px;height:40px;margin:-20px;border:2px solid var(--red);border-radius:50%;opacity:0}
-#skip{position:absolute;right:5vw;bottom:5vh;font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--mute)}
-</style><noscript><style>#intro{display:none}</style></noscript></head><body>
+</style><noscript><style>#loader{display:none}</style></noscript></head><body>
+<div id="loader" role="status" aria-label="Loading Alien Inkz" aria-busy="true"><div class="ld-glow"></div><div class="ld-stage"><div class="ld-dot"></div><div class="ld-word"></div></div></div>
+<script>
+/* ====== ALIEN INKZ LOADER (EDIT ME: W1 = word the letters first spell, W2 = final brand; keep both the same length) ====== */
+(function(){
+const L=document.getElementById('loader');if(!L)return;
+const W1='TATTOO INK',W2='ALIEN INKZ',END=4700;
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+try{history.scrollRestoration='manual'}catch(e){}scrollTo(0,0);
+const stop=e=>e.preventDefault(),keys=e=>{if(/^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName))return;if([' ','PageUp','PageDown','ArrowUp','ArrowDown','Home','End'].includes(e.key))e.preventDefault()};
+addEventListener('wheel',stop,{passive:false});addEventListener('touchmove',stop,{passive:false});addEventListener('keydown',keys);
+const loaded=new Promise(r=>document.readyState==='complete'?r():addEventListener('load',r,{once:true}));
+const finish=(minMs)=>Promise.all([new Promise(r=>setTimeout(r,minMs)),Promise.race([loaded,new Promise(r=>setTimeout(r,minMs+5000))])]).then(()=>{
+ removeEventListener('wheel',stop);removeEventListener('touchmove',stop);removeEventListener('keydown',keys);
+ L.classList.add('out');setTimeout(()=>{L.remove();document.dispatchEvent(new Event('loader:done'))},900)});
+const row=L.querySelector('.ld-word');
+const mk=ch=>{const g=document.createElement('span');g.className='ld-g';g.textContent=ch;g.setAttribute('aria-hidden','true');return g};
+if(reduce){const g=mk(W2);g.style.position='static';row.append(g);finish(1200);return}
+try{
+const stage=L.querySelector('.ld-stage'),dot=L.querySelector('.ld-dot'),glow=L.querySelector('.ld-glow');
+const fs=parseFloat(getComputedStyle(row).fontSize),em=n=>n*fs;
+const A=[...W1],B=[...W2],BAR=W1.indexOf('I');
+const meas=mk('');meas.style.visibility='hidden';row.append(meas);
+const wOf=c=>{meas.textContent=c;return meas.getBoundingClientRect().width};
+const slots=A.map((c,i)=>{const s=document.createElement('span');s.className='ld-ch';
+ const w0=wOf(c),w1=wOf(B[i]);s.style.width=w0+'px';
+ const g1=mk(c),g2=mk(B[i]);g1.style.opacity=0;g2.style.opacity=0;s.append(g1,g2);row.append(s);return{s,g1,g2,w0,w1}});
+meas.remove();
+const sr=stage.getBoundingClientRect();
+slots.forEach(o=>{const r=o.s.getBoundingClientRect();o.x=r.left+r.width/2-sr.left});
+/* timeline helper: absolute ms -> WAAPI keyframes (fill:forwards only, so later steps never override earlier ones early) */
+const tl=(arr)=>{const t0=arr[0][0],T=arr[arr.length-1][0]-t0;return{kf:arr.map(a=>Object.assign({offset:(a[0]-t0)/T,easing:a[2]||'linear'},a[1])),delay:t0,duration:T}};
+const run=(el,sp,x)=>el.animate(sp.kf,Object.assign({delay:sp.delay,duration:sp.duration,fill:'forwards'},x||{}));
+const flash=(t,peak,dur)=>glow.animate([{opacity:.45},{opacity:peak,offset:.25},{opacity:.45}],{delay:t,duration:dur,easing:'ease-out'});
 
+/* 1. dot drops, squashes, bounces, settles on the baseline */
+const rest=em(.285),D=em(.15),drop=innerHeight/2+em(.6);
+run(dot,tl([
+ [100,{transform:`translateY(${rest-drop}px) scale(1,1)`,opacity:1},'cubic-bezier(.5,0,.9,.5)'],
+ [480,{transform:`translateY(${rest}px) scale(1,1)`,opacity:1}],
+ [520,{transform:`translateY(${rest+D*.2}px) scale(1.5,.55)`,opacity:1},'cubic-bezier(.2,.7,.3,1)'],
+ [660,{transform:`translateY(${rest-em(.5)}px) scale(.9,1.12)`,opacity:1},'cubic-bezier(.5,0,.9,.5)'],
+ [800,{transform:`translateY(${rest+D*.1}px) scale(1.25,.8)`,opacity:1},'ease-out'],
+ [880,{transform:`translateY(${rest}px) scale(1,1)`,opacity:1}],
+ [2300,{transform:`translateY(${rest}px) scale(1,1)`,opacity:1},'cubic-bezier(.5,0,.9,.5)'],
+ [2480,{transform:`translateY(${rest}px) scale(0,0)`,opacity:1}]]));
+flash(480,1,520);flash(800,.7,350);
 
-<div id="intro"><svg class="gl" id="igl" viewBox="0 0 900 360"></svg><div class="iw" id="iw"></div><div class="isub" id="isub">Skin is the canvas</div><i class="idrop" id="idrop"></i><i class="irip" id="irip"></i><div id="skip">Click to skip</div><svg width="0" height="0" style="position:absolute"><defs><filter id="rough"><feTurbulence baseFrequency=".035" numOctaves="2" seed="3" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="3.5"/></filter></defs></svg></div>
+/* 2. the bar pops up above the dot -> "!", then tips over and flies to its slot to become the "I" */
+const bs=slots[BAR],tx=-bs.x,bot=em(.15),ty=s=>bot-s*em(.36);
+const T=(x,y,s,r)=>`translate(${x}px,${y}px) rotate(${r}deg) scale(1,${s})`;
+run(bs.g1,tl([
+ [900,{transform:T(tx,ty(.001),.001,0),opacity:1},'cubic-bezier(.2,.9,.3,1.3)'],
+ [1150,{transform:T(tx,ty(.7),.7,0),opacity:1},'ease-in-out'],
+ [1250,{transform:T(tx,ty(.7)-em(.03),.7,0),opacity:1},'ease-in-out'],
+ [1350,{transform:T(tx,ty(.7),.7,0),opacity:1},'cubic-bezier(.3,0,.2,1)'],
+ [1480,{transform:T(tx*.95,ty(.7)-em(.02),.7,-72),opacity:1},'cubic-bezier(.4,0,.2,1)'],
+ [1800,{transform:T(tx*.35,-em(.55),.9,-24),opacity:1},'cubic-bezier(.3,1,.4,1)'],
+ [2150,{transform:T(0,0,1,0),opacity:1}]]));
+flash(900,1,600);
+
+/* 3. letters tumble out from the bar (nearest the middle first) and land on the baseline */
+slots.map((o,i)=>i).filter(i=>i!==BAR&&A[i]!==' ').sort((a,b)=>Math.abs(slots[a].x)-Math.abs(slots[b].x)).forEach((i,k)=>{
+ const o=slots[i],r0=(k%2?1:-1)*(150+(k*53)%110),d=1450+k*70;
+ run(o.g1,tl([
+  [d,{transform:`translate(${-o.x}px,${em(-.3)}px) rotate(${r0}deg) scale(.2)`,opacity:0},'cubic-bezier(.25,.8,.3,1)'],
+  [d+115,{opacity:1}],
+  [d+365,{transform:`translate(0px,${-em(.16)}px) rotate(${-r0*.05}deg) scale(1.08)`},'cubic-bezier(.4,0,.3,1)'],
+  [d+520,{transform:'translate(0px,0px) rotate(0deg) scale(1)',opacity:1}]]))});
+flash(2150,.8,600);
+
+/* 4. letter-by-letter swap into the final brand name, left to right */
+slots.forEach((o,i)=>{const d=2900+i*80;
+ run(o.s,{kf:[{width:o.w0+'px'},{width:o.w1+'px'}],delay:d,duration:360},{easing:'cubic-bezier(.6,0,.2,1)'});
+ run(o.g1,{kf:[{transform:'translateY(0px)',opacity:1},{transform:`translateY(${em(-.5)}px)`,opacity:0}],delay:d,duration:260},{easing:'cubic-bezier(.5,0,1,.6)'});
+ run(o.g2,{kf:[{transform:`translateY(${em(.5)}px)`,opacity:0},{transform:'translateY(0px)',opacity:1}],delay:d+110,duration:300},{easing:'cubic-bezier(.2,.8,.2,1)'})});
+flash(2900,.7,600);
+finish(END);
+}catch(err){console.error('loader',err);L.remove();removeEventListener('wheel',stop);removeEventListener('touchmove',stop);removeEventListener('keydown',keys)}
+})();
+</script>
+
 <div id="vhp"></div><canvas id="smoke"></canvas><div id="cur"></div><div id="ring"></div><div class="stage" id="stage"></div><div class="spot" id="spot"></div>
 <nav id="nav"><a class="brand" href="#film">ALIEN INKZ</a><a class="dl" href="#film">Home</a><a class="dl" href="#machine">Craft</a><a class="dl" href="#work">Portfolio</a><a class="dl" href="#piercing">Piercing</a><a class="dl" href="#trust">Trust</a><a class="book" href="#contact">Book now</a><button id="burger" type="button" aria-label="Menu" aria-expanded="false" aria-controls="menu"><span></span><span></span></button></nav>
 <div id="menu" aria-hidden="true"><a href="#film">Home</a><a href="#machine">Craft</a><a href="#work">Portfolio</a><a href="#piercing">Piercing</a><a href="#trust">Trust</a><a href="#contact">Book now</a></div>
@@ -543,47 +618,6 @@ function charUpdate(){
 /* ====== PIERCING cards (img = 'pierce/septum.jpg'; leave '' for placeholder art) ====== */
 const PIERCINGS=[{t:'Septum',s:'Nose · Titanium ring',img:'assets/septum.jpg'},{t:'Industrial',s:'Ear · Barbell',img:'assets/industrial.jpg'},{t:'Helix & Tragus',s:'Ear · Cartilage',img:'assets/eaar.jpg'},{t:'Nostril',s:'Nose · Stud',img:'assets/nostril.jpg'},{t:'Labret',s:'Lip · Stud',img:'assets/labret.jpg'},{t:'Lobe & Gauge',s:'Ear · Plugs',img:'assets/lobe.jpg'}];
 
-
-/* ====== INTRO: ink drop -> alien glyphs -> ALIEN INKZ -> ink blots reveal the site ====== */
-const INTRO_ONCE=false;
-(function(){
- const done=()=>document.dispatchEvent(new Event('loader:done'));
- let seen=false;try{seen=INTRO_ONCE&&sessionStorage.getItem('introSeen')}catch(e){}
- if(matchMedia('(prefers-reduced-motion:reduce)').matches||seen){$('#intro').remove();setTimeout(done,0);return}
- try{history.scrollRestoration='manual'}catch(e){}scrollTo(0,0);
- const T={drop:.7,write:2.6,morph:.8,hold:.9,reveal:1.3},NAME='ALIEN\u00a0INKZ',COLS=9,ROWS=3;
- let seed=11;const rnd=()=>(seed=seed*16807%2147483647)/2147483647;
- const svg=$('#igl'),paths=[];let g='';
- for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++){
-  const ox=c*98+14,oy=r*118+8,n=4+Math.floor(rnd()*3),pts=[];for(let i=0;i<n;i++)pts.push([8+rnd()*54,6+rnd()*78]);
-  let d='M'+pts[0].join(' ');for(let i=1;i<n;i++){const a=pts[i-1],b=pts[i];d+=` Q${(a[0]+b[0])/2+(rnd()-.5)*46} ${(a[1]+b[1])/2+(rnd()-.5)*46} ${b[0]} ${b[1]}`}
-  const ax=rnd()*60,ay=rnd()<.5?-4:88;
-  g+=`<path pathLength="1" d="${d}" transform="translate(${ox} ${oy})" data-x="${ox}" data-y="${oy}"/><path pathLength="1" d="M${ax} ${ay} l${(rnd()-.5)*10} ${6+rnd()*8}" transform="translate(${ox} ${oy})" data-x="${ox}" data-y="${oy}"/>`}
- svg.innerHTML=g+'<circle id="tip" r="5" fill="#d23b2f" opacity="0"/>';
- $$('#igl path').forEach(e=>paths.push(e));const tip=$('#tip',svg),N=paths.length,step=T.write/N,dur=.2;
- const iw=$('#iw');NAME.split('').forEach(ch=>{const e=document.createElement('span');e.textContent=ch;iw.append(e)});
- const letters=$$('#iw span'),holes=[[50,50],[18,30],[82,28],[25,78],[78,75],[50,12],[8,55],[92,52]];
- const mask=holes.map((h,i)=>`radial-gradient(circle at ${h[0]}% ${h[1]}%,transparent var(--r${i},-90px),#000 calc(var(--r${i},-90px) + 90px))`).join(',');
- const el=$('#intro');el.style.webkitMaskImage=el.style.maskImage=mask;
- document.documentElement.style.overflow='hidden';
- const tm=T.drop+T.write+.2,tr=tm+T.morph+T.hold,ease=x=>x*x*(3-2*x);
- let t0=performance.now(),rip=0;
- const end=()=>{el.remove();document.documentElement.style.overflow='';try{sessionStorage.setItem('introSeen','1')}catch(e){}done()};
- const skip=()=>{const t=(performance.now()-t0)/1000;if(t<tr)t0=performance.now()-tr*1000};
- el.addEventListener('click',skip);addEventListener('keydown',e=>{if(e.key==='Escape'||e.key===' ')skip()});
- (function f(now){
-  const t=(now-t0)/1000;
-  const dp=cl(t/T.drop);$('#idrop').style.transform=`translateY(${lerp(-60,innerHeight*.5-13,dp*dp)}px) scaleY(${1+dp*.6})`;$('#idrop').style.opacity=t<T.drop?1:0;
-  if(t>=T.drop&&!rip){rip=1;$('#irip').animate([{transform:'scale(.2)',opacity:1},{transform:'scale(14)',opacity:0}],{duration:1100,easing:'cubic-bezier(.2,.8,.2,1)'})}
-  let lead=null;paths.forEach((p,i)=>{const k=cl((t-T.drop-i*step)/dur);p.style.strokeDashoffset=1-ease(k);if(k>0&&k<1)lead=[p,k]});
-  if(lead){const L=lead[0].getTotalLength?lead[0].getTotalLength():0,pt=lead[0].getPointAtLength(lead[1]*L);tip.setAttribute('cx',pt.x*1+ +lead[0].dataset.x);tip.setAttribute('cy',pt.y*1+ +lead[0].dataset.y);tip.setAttribute('opacity',1)}else tip.setAttribute('opacity',0);
-  svg.classList.toggle('off',t>tm);letters.forEach((l,i)=>l.classList.toggle('on',t>tm+.1+i*.07));$('#isub').classList.toggle('on',t>tm+.9);
-  const p=cl((t-tr)/T.reveal),R=Math.hypot(innerWidth,innerHeight)*.8;
-  holes.forEach((h,i)=>{const k=cl((p-i*.045)/.65);el.style.setProperty('--r'+i,(-90+(R+90)*ease(k))+'px')});
-  $('#skip').style.opacity=1-p*3;
-  if(t>=tr+T.reveal+.1)return end();
-  requestAnimationFrame(f)})(t0);
-})();
 
 /* ====== main loop: everything continuous ====== */
 let wx=0,wy=0,rr=0,wasOver=false;
