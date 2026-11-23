@@ -285,6 +285,14 @@ footer .mega{font:400 clamp(40px,16vw,300px)/.8 Georgia,serif;white-space:nowrap
 #wa .wap a{display:block;text-align:center;text-decoration:none;background:#25d366;color:#fff;padding:12px;border-radius:30px;font-size:12px;letter-spacing:.16em;text-transform:uppercase}
 #wa .wax{position:absolute;top:8px;right:10px;background:none;border:0;color:var(--mute);font-size:16px;line-height:1}
 @media(max-width:820px){#wa{left:12px;bottom:calc(18px + env(safe-area-inset-bottom,0px))}#wa .wab{width:52px;height:52px}}
+/* ===== SITE-WIDE SCROLL MOTION ===== */
+#prog{position:fixed;left:0;top:0;width:100%;height:3px;z-index:150;background:linear-gradient(90deg,var(--red),#ff8a1f);transform:scaleX(0);transform-origin:0 50%;pointer-events:none;will-change:transform}
+.rv{transition-delay:var(--d,0s)}
+.split.rv{opacity:1;transform:none}
+.sw{display:inline-block;overflow:hidden;vertical-align:top;padding:0 .06em .14em;margin:0 -.06em -.14em}
+.sw-i{display:inline-block;transform:translateY(112%);transition:transform .95s var(--ease);transition-delay:calc(var(--i,0)*70ms)}
+.in .sw-i,.sw-i.in{transform:none}
+@media (prefers-reduced-motion:reduce){.sw-i{transform:none;transition:none}.rv{opacity:1;transform:none;transition:none}#prog{display:none}}
 </style><noscript><style>#loader{display:none}</style></noscript></head><body>
 <div id="loader" role="status" aria-label="Loading Alien Inkz" aria-busy="true"><div class="ld-glow"></div><div class="ld-stage"><div class="ld-dot"></div><div class="ld-word"></div></div></div>
 <script>
@@ -367,7 +375,7 @@ finish(END);
 })();
 </script>
 
-<div id="vhp"></div><canvas id="smoke"></canvas><div id="cur"></div><div id="ring"></div><div class="stage" id="stage"></div><div class="spot" id="spot"></div>
+<div id="vhp"></div><div id="prog" aria-hidden="true"></div><canvas id="smoke"></canvas><div id="cur"></div><div id="ring"></div><div class="stage" id="stage"></div><div class="spot" id="spot"></div>
 <nav id="nav"><a class="brand" href="#film">ALIEN INKZ</a><a class="dl" href="#film">Home</a><a class="dl" href="#machine">Craft</a><a class="dl" href="#work">Portfolio</a><a class="dl" href="#piercing">Piercing</a><a class="dl" href="#trust">Trust</a><a class="book" href="#contact">Book now</a><button id="burger" type="button" aria-label="Menu" aria-expanded="false" aria-controls="menu"><span></span><span></span></button></nav>
 <div id="menu" aria-hidden="true"><a href="#film">Home</a><a href="#machine">Craft</a><a href="#work">Portfolio</a><a href="#piercing">Piercing</a><a href="#trust">Trust</a><a href="#contact">Book now</a></div>
 
@@ -719,6 +727,44 @@ document.addEventListener('loader:done',()=>{if(location.hash.length>1){const t=
    const r=R[i]*big*(1+Math.sin(t/260+i*1.3)*.05);d.style.width=d.style.height=r*2+'px';
    d.style.transform=`translate(${180+dx-r}px,${180+dy-r}px)`+(i?'':` rotate(${ang}deg) scale(${1+k},${1-k*.35})`)});
   requestAnimationFrame(f)})(0);
+})();
+</script>
+<script>
+/* ===== SITE-WIDE SCROLL MOTION: smooth scroll, staggered reveals, split-text headings, progress line ===== */
+(function(){
+ const SMOOTH=true,EASE=.1;   /* SMOOTH=false turns the inertia scrolling off; EASE = glide softness (lower = floatier) */
+ const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
+ /* 1. progress line */
+ const bar=document.getElementById('prog'),max=()=>Math.max(1,document.documentElement.scrollHeight-innerHeight);
+ const prog=()=>{bar.style.transform='scaleX('+Math.min(1,scrollY/max())+')'};
+ addEventListener('scroll',prog,{passive:true});addEventListener('resize',prog);prog();
+ /* 2. split-text headings: words slide up out of a mask when the heading is revealed */
+ let wi=0;
+ const split=n=>{[...n.childNodes].forEach(c=>{
+  if(c.nodeType===3){const f=document.createDocumentFragment();
+   c.textContent.split(/(\s+)/).forEach(p=>{if(!p)return;if(/^\s+$/.test(p)){f.append(p);return}
+    const w=document.createElement('span');w.className='sw';const i=document.createElement('span');i.className='sw-i';i.style.setProperty('--i',wi++);i.textContent=p;w.append(i);f.append(w)});
+   c.replaceWith(f)}else if(c.nodeType===1&&c.children.length+c.childNodes.length>0)split(c)})};
+ /* 3. staggered reveals on top of the existing .rv system */
+ const add=e=>{if(!e.classList.contains('rv')){e.classList.add('rv');io.observe(e)}};
+ $$('.mtitle>*,.wk-head h2').forEach(add);
+ $$('h2.big,.mtitle h2,.wk-head h2').forEach(h=>{h.setAttribute('aria-label',h.textContent.replace(/\s+/g,' ').trim());wi=0;split(h);h.classList.add('split');if(!h.classList.contains('rv'))add(h)});
+ new Set($$('.rv').map(e=>e.parentElement)).forEach(p=>$$(':scope > .rv',p).forEach((e,i)=>e.style.setProperty('--d',(i*0.09).toFixed(2)+'s')));
+ /* 4. inertia scrolling (mouse wheel / trackpad on desktop; touch and keyboard stay native) */
+ if(!SMOOTH||reduce||matchMedia('(pointer:coarse)').matches)return;
+ let target=scrollY,cur=scrollY,run=false;
+ document.documentElement.style.scrollBehavior='auto';
+ const clampY=v=>Math.max(0,Math.min(max(),v));
+ function loop(){cur+=(target-cur)*EASE;if(Math.abs(target-cur)<.5){cur=target;run=false}scrollTo(0,cur);if(run)requestAnimationFrame(loop)}
+ const go=()=>{if(!run){run=true;requestAnimationFrame(loop)}};
+ addEventListener('scroll',()=>{if(!run){target=cur=scrollY}},{passive:true});
+ addEventListener('wheel',e=>{
+  if(e.defaultPrevented||e.ctrlKey||e.shiftKey||document.getElementById('loader')||document.body.classList.contains('menu-open'))return;
+  if(Math.abs(e.deltaX)>Math.abs(e.deltaY)||(e.target.closest&&e.target.closest('textarea,select')))return;
+  e.preventDefault();target=clampY(target+e.deltaY*(e.deltaMode===1?32:1));go()},{passive:false});
+ document.addEventListener('click',e=>{const a=e.target.closest&&e.target.closest('a[href^="#"]');if(!a||a.getAttribute('href').length<2)return;
+  let t;try{t=document.querySelector(a.getAttribute('href'))}catch(_){return}if(!t)return;
+  e.preventDefault();target=clampY(t.getBoundingClientRect().top+scrollY);go()});
 })();
 </script>
 </body></html>
