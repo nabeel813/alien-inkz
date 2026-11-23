@@ -233,42 +233,45 @@ footer .mega{font:400 clamp(40px,16vw,300px)/.8 Georgia,serif;white-space:nowrap
 #film .bar i{display:block;width:100%;height:0;background:var(--red)}
 #film .load{position:absolute;inset:0;display:grid;place-items:center;background:#000;font-size:11px;letter-spacing:.3em;color:var(--mute);transition:opacity .6s}
 @media(max-width:820px){#film{height:420vh}#film .line{letter-spacing:.22em;padding-left:.22em;bottom:14vh}}
-/* ===== WORK: tattoo / piercing 3D carousel ===== */
-@property --wc{syntax:'<color>';inherits:true;initial-value:#d23b2f}
-#work{height:340vh;height:340svh;--wc:#d23b2f;transition:--wc .8s}
-.wk{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;touch-action:pan-y;--cw:250px}
-.wk-bg{position:absolute;inset:0;background:radial-gradient(ellipse 65% 60% at 50% 58%,color-mix(in srgb,var(--wc) 55%,transparent),transparent 72%),linear-gradient(#0a0908,#050404)}
-.wk-head{position:absolute;left:5vw;right:5vw;top:11vh;z-index:8;display:flex;align-items:center;gap:26px}
+/* ===== WORK: 3D tilted marquee (tattoo / piercing) ===== */
+.wk{position:relative;height:100vh;height:100svh;min-height:640px;overflow:hidden;background:#000}
+.wk-bg{position:absolute;inset:0;background:radial-gradient(ellipse 65% 60% at 50% 58%,#d23b2f44,transparent 72%)}
+.wk-head{position:absolute;left:0;right:0;top:0;z-index:8;display:flex;align-items:center;gap:26px;padding:11vh 5vw 9vh;background:linear-gradient(#000 45%,transparent);pointer-events:none}
+.wk-head>*{pointer-events:auto}
 .wk-head h2{font-size:clamp(34px,5vw,76px);line-height:1}
 .wk-tg{display:flex;gap:10px}
-.wk-tg button{background:none;border:1px solid #ffffff30;padding:10px 20px;border-radius:30px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;transition:.3s}
+.wk-tg button{background:#0a090899;border:1px solid #ffffff30;padding:10px 20px;border-radius:30px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;transition:.3s}
 .wk-tg button.on,.wk-tg button:hover{background:#ff8a1f;border-color:#ff8a1f;color:#000}
 .wkwall{margin-left:auto}
-.wk-ring{position:absolute;left:50%;top:calc(52% - var(--cw)*.9);width:calc(var(--cw)*1.25);height:calc(var(--cw)*.2);margin-left:calc(var(--cw)*-.625);border-radius:50%;border:2px solid #ffffffaa;background:radial-gradient(ellipse,#ffffff22,transparent 70%);box-shadow:0 0 30px var(--wc),0 0 70px color-mix(in srgb,var(--wc) 60%,transparent)}
-.wk-row{position:absolute;inset:0;perspective:1400px}
-.wk-i{position:absolute;left:50%;top:52%;width:var(--cw);aspect-ratio:3/4;margin:calc(var(--cw)*-.6667) 0 0 calc(var(--cw)*-.5);will-change:transform;cursor:none}
-.wk-c{position:absolute;inset:0;border-radius:14px;background-size:cover;background-position:center;border:1px solid #ffffff2a;box-shadow:0 30px 60px #000a,0 0 40px color-mix(in srgb,var(--wc) 35%,transparent)}
-.wk-pl{position:absolute;left:50%;top:calc(52% + var(--cw)*.78);width:calc(var(--cw)*1.2);height:calc(var(--cw)*.24);margin-left:calc(var(--cw)*-.6);border-radius:50%;background:radial-gradient(closest-side,#000 55%,color-mix(in srgb,var(--wc) 75%,transparent) 64%,transparent 100%);box-shadow:0 0 60px color-mix(in srgb,var(--wc) 60%,transparent)}
-.wk-nm{position:absolute;left:0;right:0;top:calc(52% + var(--cw)*.98);text-align:center;z-index:4;pointer-events:none}
-.wk-nm b{display:block;font:400 clamp(22px,3vw,40px)/1.1 Georgia,serif;letter-spacing:.12em;text-transform:uppercase}
-.wk-nm small{display:block;margin-top:8px;color:var(--mute);letter-spacing:.2em;text-transform:uppercase;font-size:11px}
-.wk-nm.sw{animation:wksw .6s var(--ease)}
-@keyframes wksw{from{opacity:0;transform:translateY(14px)}}
-.wk-ar{position:absolute;top:52%;z-index:8;width:46px;height:46px;margin-top:-23px;border-radius:50%;border:1px solid #ffffff40;background:#0a090880;font-size:26px;line-height:1;display:grid;place-items:center;backdrop-filter:blur(8px)}
-.wk-ar.l{left:4vw}.wk-ar.r{right:4vw}.wk-ar:hover{background:var(--bone);color:#000}
-.wk-tx{position:absolute;left:6vw;top:50%;width:min(360px,34vw);z-index:6;pointer-events:none;opacity:0}
-.wk-tx small{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--red)}
-.wk-tx h3{font:400 clamp(34px,4.6vw,70px)/1 Georgia,serif;letter-spacing:-.02em;margin:12px 0 14px}
-.wk-tx p{color:var(--mute);letter-spacing:.16em;text-transform:uppercase;font-size:12px}
+.wk-anim{position:absolute;inset:0;overflow:hidden;perspective:850px;-webkit-mask-image:radial-gradient(ellipse 90% 85% at 50% 52%,#000 50%,rgba(0,0,0,.9) 65%,rgba(0,0,0,.5) 80%,transparent 100%);mask-image:radial-gradient(ellipse 90% 85% at 50% 52%,#000 50%,rgba(0,0,0,.9) 65%,rgba(0,0,0,.5) 80%,transparent 100%)}
+.wk-stage{position:absolute;top:-23%;left:-12%;display:flex;width:130%;height:150%;gap:16px;transform-style:preserve-3d;transform:rotateX(11deg) rotateY(-13deg) rotateZ(10deg) translate3d(4%,2%,-65px)}
+.wk-col{flex:1;min-width:0;overflow:hidden}
+.wk-track{display:flex;flex-direction:column;gap:14px;will-change:transform;animation:var(--dir) var(--dur) linear var(--dl) infinite}
+.wk-col:nth-child(1) .wk-track{--dir:wk-up;--dur:35s;--dl:0s}
+.wk-col:nth-child(2) .wk-track{--dir:wk-down;--dur:30s;--dl:-6s}
+.wk-col:nth-child(3) .wk-track{--dir:wk-up;--dur:38s;--dl:-12s}
+.wk-col:nth-child(4) .wk-track{--dir:wk-down;--dur:33s;--dl:-18s}
+.wk-col:nth-child(5) .wk-track{--dir:wk-up;--dur:36s;--dl:-9s}
+.wk-col:nth-child(6) .wk-track{--dir:wk-down;--dur:31s;--dl:-15s}
+@keyframes wk-up{from{transform:translateY(0)}to{transform:translateY(calc(-50% - 7px))}}
+@keyframes wk-down{from{transform:translateY(calc(-50% - 7px))}to{transform:translateY(0)}}
+.wk-anim:hover .wk-track,.wk.off .wk-track{animation-play-state:paused}
+.wk-card{position:relative;flex:none;aspect-ratio:3/4;overflow:hidden;border:1px solid #ffffff22;border-radius:17px;background:#151311;box-shadow:0 14px 36px #000a;backface-visibility:hidden;transition:transform .3s var(--ease),border-color .3s}
+.wk-card:hover{z-index:2;transform:translateZ(30px) scale(1.03);border-color:var(--red)}
+.wk-img{position:absolute;inset:0;background-size:cover;background-position:center}
+.wk-cap{position:absolute;inset:auto 0 0;padding:16px;background:linear-gradient(transparent,#000d)}
+.wk-cap b{display:block;font:400 clamp(16px,1.6vw,22px)/1.1 Georgia,serif}
+.wk-cap small{color:var(--mute);letter-spacing:.14em;text-transform:uppercase;font-size:10px}
 #wkinfo{margin:0 8vw 12vh;display:none}
+@media(max-width:900px){.wk-col:nth-child(n+5){display:none}}
 @media(max-width:820px){
- #work{height:290vh;height:290svh}
- .wk-head{top:74px;left:20px;right:20px;flex-wrap:wrap;gap:14px}.wk-head h2{font-size:clamp(34px,10vw,48px);width:100%}
+ .wk-head{padding:74px 20px 60px;flex-wrap:wrap;gap:14px}.wk-head h2{font-size:clamp(34px,10vw,48px);width:100%}
  .wkwall{margin-left:0;padding:10px 18px}
- .wk-ar{display:none}
- .wk-tx{left:20px;right:20px;width:auto;top:auto;bottom:11vh}
  #wkinfo{margin:0 20px 70px}
 }
+@media(max-width:700px){.wk-col:nth-child(n+4){display:none}.wk-stage{left:-22%;width:145%;gap:12px}.wk-track{gap:12px}}
+@media(max-width:470px){.wk-col:nth-child(n+3){display:none}.wk-stage{left:-31%;width:165%}}
+@media(prefers-reduced-motion:reduce){.wk-track{animation:none}}
 /* ===== WHATSAPP POPUP BUTTON ===== */
 #contact p a:hover{color:var(--red)}
 #wa{position:fixed;left:18px;bottom:28px;z-index:45}
@@ -412,14 +415,13 @@ finish(END);
 </div></section>
 
 <section id="work"><i id="piercing" style="position:absolute;top:0;left:0"></i><div class="wk" id="wk">
- <div class="wk-bg" id="wkbg"></div>
+ <div class="wk-bg"></div>
+ <div class="wk-anim" aria-hidden="true"><div class="wk-stage" id="wkstage">
+  <div class="wk-col"><div class="wk-track"></div></div><div class="wk-col"><div class="wk-track"></div></div><div class="wk-col"><div class="wk-track"></div></div><div class="wk-col"><div class="wk-track"></div></div><div class="wk-col"><div class="wk-track"></div></div><div class="wk-col"><div class="wk-track"></div></div>
+ </div></div>
  <div class="wk-head"><h2>Selected <span class="serif" style="color:var(--red);font-style:italic">work</span></h2>
   <div class="wk-tg" id="wktg"><button type="button" data-m="t" class="on">Tattoo</button><button type="button" data-m="p">Piercing</button></div>
   <a class="btn wkwall" href="wall.html" data-h>View the Wall &rarr;</a></div>
- <div class="wk-ring"></div><div class="wk-row" id="wkrow"></div><div class="wk-pl" id="wkpl"></div>
- <div class="wk-nm" id="wknm"><b></b><small></small></div>
- <button class="wk-ar l" id="wkl" type="button" aria-label="Previous">&#8249;</button><button class="wk-ar r" id="wkr" type="button" aria-label="Next">&#8250;</button>
- <div class="wk-tx" id="wktx"><small></small><h3></h3><p></p></div>
 </div></section>
 
 <div class="grid rv" id="wkinfo"><div><b class="sm">Implant-grade</b><p>Titanium and gold jewelry, nickel-free.</p></div><div><b class="sm">Single-use</b><p>Sterile needles, never a piercing gun.</p></div><div><b class="sm">Check-up</b><p>Healing review and jewelry fitting.</p></div><div><b class="sm">Aftercare</b><p>A clear written aftercare plan.</p></div></div>
@@ -503,44 +505,17 @@ function machine(){const m=$('#machine'),r=m.getBoundingClientRect(),p=cl(-r.top
   d.style.transform=`translate(-50%,-50%) translate3d(${q[3]*k}px,${q[4]*k}px,${q[5]*k}px) rotateZ(${(i%2?1:-1)*k*5}deg)`;
   d.style.opacity=cl((e-.03)*8);d.style.setProperty('--lb',k>.85?1:0)})}
 
-/* ====== WORK: tattoo / piercing 3D carousel (scroll zooms into the selected piece) ====== */
-const WK_COL=['#d23b2f','#2f7bd2','#e07a1f','#8a3cff','#12a37a','#d2a32f'];
-let wkM='t',wkI=0,wkF=0,wkEls=[],wkX=null;
-const wkSets={get t(){return WORKS},get p(){return PIERCINGS}},wkRow=$('#wkrow'),wkNm=$('#wknm'),wkTx=$('#wktx'),wkBg=$('#wkbg'),wkRing=$('.wk-ring'),wkPl=$('#wkpl'),wkEl=$('#wk'),wkSec=$('#work');
-let wkLast=0,wkHov=false;
-function wkSet(){wkLast=performance.now();const L=wkSets[wkM],w=L[wkI];wkNm.classList.remove('sw');void wkNm.offsetWidth;wkNm.classList.add('sw');
- wkNm.children[0].textContent=w.t;wkNm.children[1].textContent=w.s;
- wkTx.children[0].textContent='0'+(wkI+1)+' / 0'+L.length;wkTx.children[1].textContent=w.t;wkTx.children[2].textContent=w.s;
- wkSec.style.setProperty('--wc',WK_COL[wkI%6])}
-function wkGo(i){const n=wkSets[wkM].length;wkI=(i+n)%n;wkSet()}
-function wkBuild(){wkRow.innerHTML='';wkEls=wkSets[wkM].map((w,i)=>{const d=document.createElement('div');d.className='wk-i';
- d.innerHTML='<div class="wk-c" style="background-image:url('+w.img+')"></div>';d.onclick=()=>wkGo(i);wkRow.append(d);return d})}
-function wkMode(m){wkM=m;wkI=0;wkF=0;$$('#wktg button').forEach(b=>b.classList.toggle('on',b.dataset.m===m));wkBuild();wkSet();$('#wkinfo').style.display=m==='p'?'block':'none'}
+/* ====== WORK: 3D tilted marquee (tattoo / piercing) ====== */
+const wkSets={get t(){return WORKS},get p(){return PIERCINGS}},wkStage=$('#wkstage'),wkEl=$('#wk');let wkM='t';
+const wkCard=(w,copy)=>'<div class="wk-card"'+(copy?' aria-hidden="true"':'')+'><div class="wk-img" style="background-image:url('+w.img+')"></div><div class="wk-cap"><b>'+w.t+'</b><small>'+w.s+'</small></div></div>';
+function wkBuild(){const L=wkSets[wkM],n=L.length;$$('.wk-track',wkStage).forEach((tr,i)=>{const s=i%n,list=L.slice(s).concat(L.slice(0,s));
+ tr.innerHTML=list.map(w=>wkCard(w,0)).join('')+list.map(w=>wkCard(w,1)).join('')})}   /* each column starts at a different piece; list twice = seamless loop */
+function wkMode(m){wkM=m;$$('#wktg button').forEach(b=>b.classList.toggle('on',b.dataset.m===m));wkBuild();$('#wkinfo').style.display=m==='p'?'block':'none'}
 $$('#wktg button').forEach(b=>b.onclick=()=>wkMode(b.dataset.m));
 $$('a[href="#piercing"]').forEach(a=>a.addEventListener('click',()=>wkMode('p')));
-$('#wkl').onclick=()=>wkGo(wkI-1);$('#wkr').onclick=()=>wkGo(wkI+1);
-wkEl.addEventListener('pointerdown',e=>{wkX=e.clientX});
-addEventListener('pointerup',e=>{if(wkX===null)return;const d=e.clientX-wkX;wkX=null;if(Math.abs(d)>50)wkGo(wkI+(d<0?1:-1))});
-wkRow.addEventListener('mouseover',e=>{wkHov=!!e.target.closest('.wk-i')});wkRow.addEventListener('mouseleave',()=>{wkHov=false;wkLast=performance.now()});
-/* auto-slide: next piece every 3 s; pauses on hover/drag, while zoomed in, off screen, or tab hidden */
-setInterval(()=>{if(wkHov||wkX!==null||document.hidden||performance.now()-wkLast<3000)return;
- const r=wkSec.getBoundingClientRect(),p=-r.top/(r.height-VH);if(r.top>VH*.5||r.bottom<VH*.5||p>.3)return;wkGo(wkI+1)},300);
+new IntersectionObserver(e=>wkEl.classList.toggle('off',!e[0].isIntersecting)).observe(wkEl);   /* pause when off screen */
+function work(){}   /* kept so the main loop call still works */
 wkMode('t');
-function work(){const n=wkEls.length,r=wkSec.getBoundingClientRect(),p=cl(-r.top/(r.height-VH)),t=performance.now(),m=MOB.matches;
- const df=((wkI-wkF+n/2)%n+n)%n-n/2;wkF=((wkF+df*.12)%n+n)%n;
- const cw=m?Math.min(innerWidth*.36,160):Math.min(innerWidth*.17,250),z=cl((p-.3)/.35),k=z*z*(3-2*z);
- wkEl.style.setProperty('--cw',cw+'px');
- const zs=m?Math.min(innerWidth*.62/cw,(VH*.36)/(cw*4/3)):Math.min(VH*.74/(cw*4/3),3.2);
- wkEls.forEach((el,i)=>{const d=((i-wkF+n/2)%n+n)%n-n/2,a=Math.abs(d),sel=1-Math.min(a,1);
-  const x=d*cw*.95+(m?0:innerWidth*.2*k*sel)+(a>.5?Math.sign(d)*k*cw*2:0),y=Math.sin(t/900+i*1.7)*8*(1-k)+(m?-VH*.02*k*sel:0);
-  el.style.transform='translate3d('+x+'px,'+y+'px,'+(-Math.min(a,2)*60)+'px) rotateY('+(-d*26*(1-k*sel))+'deg) scale('+(1-.34*Math.min(a,1)+(zs-1)*k*sel)+')';
-  el.style.opacity=a>3.2?0:(sel>.5?1:(1-.22*a)*(1-k));el.style.zIndex=100-Math.round(a*10);
-  el.style.filter='brightness('+(.5+.5*sel)+')';el.style.pointerEvents=k>.5?'none':'auto'});
- const f=1-cl(k*1.6);wkRing.style.opacity=f;wkPl.style.opacity=f;wkNm.style.opacity=f;wkBg.style.opacity=.6+.4*k;
- $$('.wk-ar').forEach(b=>b.style.opacity=f);
- wkTx.style.opacity=cl((k-.45)*2.2);wkTx.style.transform='translateY('+((1-k)*30-(m?0:50))+'px)'}
-
-
 /* ====== floating style cards (parallax + mouse) ====== */
 function styles(){if(MOB.matches||!$('#styles'))return;const s=$('#styles'),r=s.getBoundingClientRect(),p=(r.top+r.height/2-VH/2)/VH;
  $$('.fl').forEach(f=>{const sp=+f.dataset.s,x=+f.dataset.x,y=+f.dataset.y;
