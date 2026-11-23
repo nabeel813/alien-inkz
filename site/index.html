@@ -406,7 +406,7 @@ finish(END);
 
 
 <section id="machine"><div class="pin">
- <div class="mtitle"><h2>Deconstructed.<br><span style="color:var(--red)">Every part, on purpose.</span></h2><p>Scroll to pull the machine apart. Sterile needles, tuned coils, steady hands — nothing about your tattoo is left to chance.</p></div>
+ <div class="mtitle"><h2>Every style.<br><span style="color:var(--red)">Drawn with intent.</span></h2><p>Scroll to explore the styles I work in. From bold traditional lines to delicate fine line, every piece is designed around you.</p></div>
  <div id="scene" style="perspective:1400px"><div class="rig" id="rig"></div></div>
  <div class="prog"><i id="pg"></i></div>
 </div></section>
@@ -490,8 +490,8 @@ function smoke(t){cx2.clearRect(0,0,W,H);cx2.globalCompositeOperation='lighter';
  P.forEach(p=>{p.x+=p.vx+Math.sin(t/2000+p.a)*.4+(mx-W/2)*.00008;p.y+=p.vy;if(p.y<-p.r){p.y=H+p.r;p.x=Math.random()*W}
  const g=cx2.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r);g.addColorStop(0,'rgba(140,125,115,.06)');g.addColorStop(1,'rgba(0,0,0,0)');cx2.fillStyle=g;cx2.fillRect(p.x-p.r,p.y-p.r,p.r*2,p.r*2)})}
 
-/* ====== MACHINE exploded view ====== */
-const PARTS=[['Steel frame',10,190,-60,-90,0],['Twin coils',9,140,110,-85,50],['Armature bar',8,160,-70,45,70],['Back spring',7,170,125,50,-40],['Contact screws',6,120,-235,-5,90],['Ergonomic grip',5,130,-15,160,30],['Sterile tube',4,150,175,165,10],['Needle bar',3,170,-240,130,-30],['Single-use needles',2,150,-255,-125,40],['Clip-cord',1,150,255,-140,60]];
+/* ====== MACHINE exploded view (labels = tattoo styles) ====== */
+const PARTS=[['Traditional (Old School)',10,190,-60,-90,0],['Neo-Traditional',9,140,110,-85,50],['Realism',8,160,-70,45,70],['Fine Line',7,170,125,50,-40],['Blackwork',6,120,-235,-5,90],['Dotwork',5,130,-15,160,30],['Japanese Irezumi',4,150,175,165,10],['Watercolor',3,170,-240,130,-30],['Geometric',2,150,-255,-125,40],['Tribal',1,150,255,-140,60]];
 const rig=$('#rig');
 const ASM=document.createElement('div');ASM.className='part asm';ASM.style.width='270px';ASM.innerHTML='<img src="assets/tool11.webp" alt="Tattoo machine">';rig.append(ASM);
 PARTS.forEach(p=>{const d=document.createElement('div');d.className='part';d.style.width=p[2]+'px';d.innerHTML='<img src="assets/tool'+p[1]+'.webp" alt="'+p[0]+'" loading="lazy" decoding="async"><label>'+p[0]+'</label>';rig.append(d)});
