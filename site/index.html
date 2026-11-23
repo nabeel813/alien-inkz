@@ -401,8 +401,7 @@ finish(END);
 <section id="work"><i id="piercing" style="position:absolute;top:0;left:0"></i><div class="wk" id="wk">
  <div class="wk-bg" id="wkbg"></div>
  <div class="wk-head"><h2>Selected <span class="serif" style="color:var(--red);font-style:italic">work</span></h2>
-  <div class="wk-tg" id="wktg"><button type="button" data-m="t" class="on">Tattoo</button><button type="button" data-m="p">Piercing</button></div>
-  <a class="btn wkwall" href="wall.html" data-h>View the Wall &rarr;</a></div>
+  <div class="wk-tg" id="wktg"><button type="button" data-m="t" class="on">Tattoo</button><button type="button" data-m="p">Piercing</button></div></div>
  <div class="wk-ring"></div><div class="wk-row" id="wkrow"></div><div class="wk-pl" id="wkpl"></div>
  <div class="wk-nm" id="wknm"><b></b><small></small></div>
  <button class="wk-ar l" id="wkl" type="button" aria-label="Previous">&#8249;</button><button class="wk-ar r" id="wkr" type="button" aria-label="Next">&#8250;</button>
@@ -499,7 +498,8 @@ function machine(){const m=$('#machine'),r=m.getBoundingClientRect(),p=cl(-r.top
 const WK_COL=['#d23b2f','#2f7bd2','#e07a1f','#8a3cff','#12a37a','#d2a32f'];
 let wkM='t',wkI=0,wkF=0,wkEls=[],wkX=null;
 const wkSets={get t(){return WORKS},get p(){return PIERCINGS}},wkRow=$('#wkrow'),wkNm=$('#wknm'),wkTx=$('#wktx'),wkBg=$('#wkbg'),wkRing=$('.wk-ring'),wkPl=$('#wkpl'),wkEl=$('#wk'),wkSec=$('#work');
-function wkSet(){const L=wkSets[wkM],w=L[wkI];wkNm.classList.remove('sw');void wkNm.offsetWidth;wkNm.classList.add('sw');
+let wkLast=0,wkHov=false;
+function wkSet(){wkLast=performance.now();const L=wkSets[wkM],w=L[wkI];wkNm.classList.remove('sw');void wkNm.offsetWidth;wkNm.classList.add('sw');
  wkNm.children[0].textContent=w.t;wkNm.children[1].textContent=w.s;
  wkTx.children[0].textContent='0'+(wkI+1)+' / 0'+L.length;wkTx.children[1].textContent=w.t;wkTx.children[2].textContent=w.s;
  wkSec.style.setProperty('--wc',WK_COL[wkI%6])}
@@ -512,6 +512,10 @@ $$('a[href="#piercing"]').forEach(a=>a.addEventListener('click',()=>wkMode('p'))
 $('#wkl').onclick=()=>wkGo(wkI-1);$('#wkr').onclick=()=>wkGo(wkI+1);
 wkEl.addEventListener('pointerdown',e=>{wkX=e.clientX});
 addEventListener('pointerup',e=>{if(wkX===null)return;const d=e.clientX-wkX;wkX=null;if(Math.abs(d)>50)wkGo(wkI+(d<0?1:-1))});
+wkRow.addEventListener('mouseover',e=>{wkHov=!!e.target.closest('.wk-i')});wkRow.addEventListener('mouseleave',()=>{wkHov=false;wkLast=performance.now()});
+/* auto-slide: next piece every 3 s; pauses on hover/drag, while zoomed in, off screen, or tab hidden */
+setInterval(()=>{if(wkHov||wkX!==null||document.hidden||performance.now()-wkLast<3000)return;
+ const r=wkSec.getBoundingClientRect(),p=-r.top/(r.height-VH);if(r.top>VH*.5||r.bottom<VH*.5||p>.3)return;wkGo(wkI+1)},300);
 wkMode('t');
 function work(){const n=wkEls.length,r=wkSec.getBoundingClientRect(),p=cl(-r.top/(r.height-VH)),t=performance.now(),m=MOB.matches;
  const df=((wkI-wkF+n/2)%n+n)%n-n/2;wkF=((wkF+df*.12)%n+n)%n;
