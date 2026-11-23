@@ -602,7 +602,7 @@ $('#f').onsubmit=e=>{e.preventDefault();const d=new FormData(e.target);
 document.addEventListener('loader:done',()=>{if(location.hash.length>1){const t=document.querySelector(location.hash);t&&t.scrollIntoView({behavior:'instant'})}});</script><script>
 /* ===== SCROLL FILM: plays the studio video as you scroll ===== */
 (function(){
- const N=166, sec=document.getElementById('film'), cv=document.getElementById('filmc'), ctx=cv.getContext('2d'),
+ const N=165, sec=document.getElementById('film'), cv=document.getElementById('filmc'), ctx=cv.getContext('2d'),
   lines=[...sec.querySelectorAll('.line')], bar=document.getElementById('filmbar'), hint=document.getElementById('filmhint'), ld=document.getElementById('filmload');
  const imgs=new Array(N), src=i=>'frames/f_'+String(i+1).padStart(3,'0')+'.webp';
  let W=0,H=0,cur=0,tgt=0,shown=-1,done=0;
