@@ -1,0 +1,124 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='28' fill='%23d23b2f'/%3E%3C/svg%3E">
+<title>The Wall — ALIEN INKZ</title>
+<style>
+:root{--bg:#0a0908;--bone:#efe9e1;--red:#d23b2f;--mute:#8d867d;--ease:cubic-bezier(.2,.8,.2,1)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--bone);font-family:Inter,system-ui,sans-serif;overflow-x:hidden;cursor:none}
+a{color:inherit;cursor:none;text-decoration:none}
+section{position:relative;z-index:2}
+#cur{position:fixed;width:14px;height:14px;border-radius:50%;background:var(--red);z-index:99;pointer-events:none;transform:translate(-50%,-50%);mix-blend-mode:screen}
+#ring{position:fixed;width:54px;height:54px;border:1px solid var(--bone);border-radius:50%;z-index:98;pointer-events:none;transform:translate(-50%,-50%);transition:width .3s,height .3s,background .3s;opacity:.7}
+#ring.big{width:96px;height:96px;background:#d23b2f22}
+nav{position:fixed;top:18px;left:50%;transform:translateX(-50%);z-index:50;display:flex;gap:26px;align-items:center;padding:12px 26px;border:1px solid #ffffff22;border-radius:40px;-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);background:#0a090880;font-size:12px;letter-spacing:.18em;text-transform:uppercase;white-space:nowrap}
+nav a{opacity:.75;transition:.3s}nav a:hover{opacity:1;color:var(--red)}
+nav .book{background:var(--bone);color:#000;padding:8px 16px;border-radius:30px;opacity:1}nav .book:hover{color:#000}
+@media (hover:none),(pointer:coarse){body,a{cursor:auto}#cur,#ring{display:none}}
+@media (max-width:820px){nav{top:10px;gap:14px;padding:8px 8px 8px 18px;font-size:10px;letter-spacing:.12em;max-width:calc(100vw - 24px)}nav .book{padding:9px 14px}}
+</style></head><body>
+<div id="cur"></div><div id="ring"></div>
+<nav><a href="index.html">Home</a><a href="index.html#work">&larr; Portfolio</a><a class="book" href="index.html#contact">Book now</a></nav>
+<section id="wall"></section>
+<script>
+const WORKS=[{t:'Phoenix Back Piece',s:'Realism · 18h',img:'assets/phoenix.jpeg'},{t:'Serpent Sleeve',s:'Blackwork · 24h',img:'assets/serpent.jpeg'},{t:'Mandala Chest',s:'Dotwork · 12h',img:'assets/chest.jpeg'},{t:'Wolf Portrait',s:'Realism · 9h',img:'assets/wolf.jpeg'},{t:'Floral Fine-line',s:'Fine line · 4h',img:'assets/floral.jpeg'},{t:'Geometric Forearm',s:'Blackwork · 6h',img:'assets/geometric.jpeg'}];
+const mv=document.getElementById('cur'),rg=document.getElementById('ring');let x=innerWidth/2,y=innerHeight/2,rx=x,ry=y;
+addEventListener('mousemove',e=>{x=e.clientX;y=e.clientY;mv.style.left=x+'px';mv.style.top=y+'px'});
+(function f(){rx+=(x-rx)*.12;ry+=(y-ry)*.12;rg.style.left=rx+'px';rg.style.top=ry+'px';requestAnimationFrame(f)})();
+document.querySelectorAll('nav a').forEach(a=>{a.onmouseenter=()=>rg.classList.add('big');a.onmouseleave=()=>rg.classList.remove('big')});
+</script>
+<script>
+/* ====== THE WALL: self-contained portfolio section ======
+   Two identical grids stacked = seamless upward loop. One rAF loop writes translateY / rotateX / rotateY
+   straight to the DOM (no per-frame re-render, no animation libraries). Photos come from the WORKS array (copied from index.html when the site is built),
+   cycled to fill 7 x 64 = 224 tiles per copy (448 total). Add works to WORKS and they appear here automatically. */
+(function(){
+let W=[];try{W=(typeof WORKS!=='undefined'?WORKS:[]).filter(w=>w&&w.img)}catch(e){}
+const host=document.getElementById('wall');if(!host||!W.length)return;
+const MOBW=matchMedia('(max-width:820px)').matches,COLS=MOBW?3:7,ROWS=MOBW?22:32,PER=COLS*ROWS,SPEED=MOBW?42:56,TILT=18,DAMP=.08;   /* desktop 7 x 32 = 224 tiles per copy, phone 3 x 22 = 66 (bigger tiles, lighter page); 2 copies each */
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const padToGrid=(items,n)=>Array.from({length:n},(_,i)=>items[i%items.length]);
+const initials=t=>String(t).split(/\s+/).filter(Boolean).slice(0,2).map(s=>s[0]).join('').toUpperCase();
+
+/* ---- all styles in one injected <style> block ---- */
+const CSS=`
+#wall{--wg:clamp(6px,1.1vw,16px);height:100vh;height:100svh;min-height:520px;overflow:hidden;background:var(--bg);isolation:isolate}
+.wl-title{position:absolute;inset:0;z-index:0;display:grid;place-items:center;margin:0;pointer-events:none;user-select:none;white-space:nowrap;
+ font:900 clamp(70px,16vw,260px)/.9 Inter,system-ui,sans-serif;letter-spacing:-.04em;text-transform:uppercase;color:var(--bone);
+ text-shadow:0 0 40px rgba(210,59,47,.65),0 0 110px rgba(210,59,47,.4)}
+.wl-tilt{position:absolute;top:-10%;bottom:-10%;left:-8%;right:-8%;z-index:1;transform:perspective(1100px) rotateX(0deg) rotateY(0deg);transform-origin:50% 50%;will-change:transform}
+.wl-track{position:absolute;left:0;top:0;width:100%;will-change:transform}
+.wl-grid{display:grid;grid-template-columns:repeat(${COLS},minmax(0,1fr));gap:var(--wg);padding-bottom:var(--wg)}
+.wl-tile{position:relative;aspect-ratio:1/1;border-radius:10px;overflow:hidden;background:#151311;filter:grayscale(.85);transform:scale(1);
+ transition:transform .35s cubic-bezier(.34,1.56,.64,1),filter .35s cubic-bezier(.2,.8,.2,1),box-shadow .35s cubic-bezier(.2,.8,.2,1)}
+.wl-tile.on{transform:scale(1.28);filter:none;z-index:5;box-shadow:0 30px 60px #000c,0 0 0 1px #ffffff40}
+.wl-tile img{display:block;width:100%;height:100%;object-fit:cover;pointer-events:none;user-select:none;-webkit-user-drag:none}
+.wl-vig{position:absolute;left:0;right:0;height:30%;z-index:2;pointer-events:none}
+.wl-vig.t{top:0;background:linear-gradient(var(--bg),transparent)}
+.wl-vig.b{bottom:0;background:linear-gradient(transparent,var(--bg))}
+.wl-tip{position:fixed;left:0;top:0;z-index:60;display:flex;align-items:center;gap:10px;padding:7px 16px 7px 7px;border:1px solid #ffffff30;border-radius:40px;
+ background:#0a090899;-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);color:var(--bone);font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+ white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .2s}
+.wl-tip.show{opacity:1}
+.wl-tip i{font-style:normal;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--red);font-size:10px;letter-spacing:.04em}
+@media (prefers-reduced-motion:reduce){.wl-tile{transition:filter .2s,box-shadow .2s}.wl-tile.on{transform:none}}
+`;
+const st=document.createElement('style');st.id='wall-styles';st.textContent=CSS;document.head.append(st);
+
+/* ---- build: 2 identical grids of 224 tiles ---- */
+const tiles=padToGrid(W,PER);
+const grid=hide=>`<div class="wl-grid"${hide?' aria-hidden="true"':''}>`+tiles.map((w,i)=>
+ `<div class="wl-tile" data-i="${i%W.length}"><img src="${esc(w.img)}" alt="${hide?'':esc(w.t)}" draggable="false" decoding="async"></div>`).join('')+`</div>`;
+host.setAttribute('aria-label','The Wall - portfolio of works');
+host.innerHTML=`<h2 class="wl-title">The Wall</h2><div class="wl-tilt"><div class="wl-track">${grid(0)}${grid(1)}</div></div><div class="wl-vig t"></div><div class="wl-vig b"></div>`;
+const tilt=host.querySelector('.wl-tilt'),track=host.querySelector('.wl-track'),ring=document.getElementById('ring');
+
+/* ---- tooltip (position:fixed, follows the hovered tile) ---- */
+const tip=document.createElement('div');tip.className='wl-tip';tip.setAttribute('aria-hidden','true');tip.innerHTML='<i></i><span></span>';document.body.append(tip);
+const tIni=tip.firstChild,tName=tip.lastChild;
+
+/* ---- state lives in plain variables / refs, never in React-style re-renders ---- */
+let loopLen=1,off=0,rx=0,ry=0,mx=0,my=0,inside=false,hot=null,tw=0,vis=false,raf=0,last=0,fc=0;
+const measure=()=>{const g=track.children;loopLen=Math.max(1,g[1].offsetTop-g[0].offsetTop)};
+measure();addEventListener('resize',measure);if(window.ResizeObserver)new ResizeObserver(measure).observe(host);
+
+function setHot(t){if(t===hot)return;hot&&hot.classList.remove('on');hot=t;
+ if(t){t.classList.add('on');const w=W[+t.dataset.i];tName.textContent=w.t;tIni.textContent=initials(w.t);tip.classList.add('show');tw=tip.offsetWidth}
+ else tip.classList.remove('show');
+ ring&&ring.classList.toggle('big',!!t)}
+function hover(){let t=null;
+ if(inside){const e=document.elementFromPoint(mx,my);t=e&&e.closest?e.closest('.wl-tile'):null;if(t&&!host.contains(t))t=null}
+ setHot(t)}
+function place(){if(!hot)return;const r=hot.getBoundingClientRect();
+ const x=Math.min(innerWidth-tw/2-8,Math.max(tw/2+8,r.left+r.width/2)),y=Math.max(r.top,64);
+ tip.style.transform=`translate(${x}px,${y}px) translate(-50%,calc(-100% - 10px))`}
+
+host.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;inside=true;if(reduce){hover();place()}});
+host.addEventListener('mouseleave',()=>{inside=false;setHot(null)});
+/* touch: tap / drag a tile to light it up, it relaxes a moment after you let go */
+let tOut=0;const tt=e=>{const t=e.touches[0];if(!t)return;clearTimeout(tOut);mx=t.clientX;my=t.clientY;inside=true;if(reduce){hover();place()}};
+host.addEventListener('touchstart',tt,{passive:true});host.addEventListener('touchmove',tt,{passive:true});
+host.addEventListener('touchend',()=>{tOut=setTimeout(()=>{inside=false;setHot(null)},1400)},{passive:true});
+
+/* ---- the single rAF loop: scroll offset + damped 3D tilt written straight to the DOM ---- */
+const clamp1=v=>Math.max(-1,Math.min(1,v));
+function frame(t){raf=0;if(!vis)return;
+ const dt=Math.min(.05,(t-(last||t))/1000);last=t;
+ off+=SPEED*dt;if(off>=loopLen)off-=loopLen;
+ let tx=0,ty=0;
+ if(inside){const r=host.getBoundingClientRect();ty=clamp1((mx-r.left)/r.width*2-1)*TILT;tx=-clamp1((my-r.top)/r.height*2-1)*TILT}
+ rx+=(tx-rx)*DAMP;ry+=(ty-ry)*DAMP;
+ track.style.transform=`translate3d(0,${(-off).toFixed(2)}px,0)`;
+ tilt.style.transform=`perspective(1100px) rotateX(${rx.toFixed(3)}deg) rotateY(${ry.toFixed(3)}deg)`;
+ if(++fc%3===0)hover();
+ place();
+ raf=requestAnimationFrame(frame)}
+
+/* only run while the section is on screen; prefers-reduced-motion = frozen, no loop at all */
+if(!reduce)new IntersectionObserver(es=>{vis=es[0].isIntersecting;
+ if(vis&&!raf){last=0;raf=requestAnimationFrame(frame)}if(!vis)setHot(null)}).observe(host);
+})();
+
+</script>
+</body></html>
