@@ -222,6 +222,14 @@ footer .mega{font:400 clamp(40px,16vw,300px)/.8 Georgia,serif;white-space:nowrap
 
 /* old hero + about replaced by the scroll film (kept in file, hidden, because the page script still measures them) */
 #hero,#about,#stage,#spot{display:none!important}
+/* ===== FLOATING VIDEO CARD (top-right, under the menu) ===== */
+#vcard{position:fixed;right:18px;top:96px;width:170px;aspect-ratio:9/16;z-index:40;border-radius:16px;overflow:hidden;background:#000;box-shadow:0 18px 50px #000b,0 0 0 1px #ffffff1f;transition:opacity .45s var(--ease),transform .45s var(--ease)}
+#vcard.off{opacity:0;transform:translateY(14px) scale(.92);pointer-events:none}
+#vcard video{width:100%;height:100%;object-fit:cover;display:block}
+#vcard button{position:absolute;top:8px;width:28px;height:28px;border:0;border-radius:50%;background:#000a;color:#fff;font:14px/1 Inter,system-ui,sans-serif;cursor:pointer;display:grid;place-items:center;backdrop-filter:blur(6px)}
+#vcard .mu{left:8px}#vcard .cl{right:8px}
+#vcard button:hover{background:var(--red)}
+@media(max-width:820px){#vcard{width:104px;right:10px;top:84px;border-radius:12px}#vcard button{width:24px;height:24px;top:6px;font-size:12px}#vcard .mu{left:6px}#vcard .cl{right:6px}}
 /* ===== SCROLL FILM (video scrubbed by scroll) ===== */
 #film{height:480vh;position:relative;z-index:6;background:#000}
 #film .stick{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden}
@@ -231,7 +239,7 @@ footer .mega{font:400 clamp(40px,16vw,300px)/.8 Georgia,serif;white-space:nowrap
 #film .line.on{opacity:1;transform:none}
 #film .line a{pointer-events:auto;display:inline-block;margin-top:26px;font-family:Inter,system-ui,sans-serif;font-size:12px;letter-spacing:.22em;text-decoration:none;background:var(--bone);color:#000;padding:14px 26px;border-radius:30px}
 #film .hint{position:absolute;left:50%;bottom:4vh;transform:translateX(-50%);font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--mute);transition:opacity .5s}
-#film .bar{position:absolute;right:3vw;top:50%;width:2px;height:90px;transform:translateY(-50%);background:#ffffff22}
+#film .bar{position:absolute;left:3vw;top:50%;width:2px;height:90px;transform:translateY(-50%);background:#ffffff22}
 #film .bar i{display:block;width:100%;height:0;background:var(--red)}
 #film .load{position:absolute;inset:0;display:grid;place-items:center;background:#000;font-size:11px;letter-spacing:.3em;color:var(--mute);transition:opacity .6s}
 @media(max-width:820px){#film{height:420vh}#film .line{letter-spacing:.22em;padding-left:.22em;bottom:14vh}}
@@ -625,6 +633,21 @@ document.addEventListener('loader:done',()=>{if(location.hash.length>1){const t=
  /* first frame first, then the rest in order */
  load(0); for(let i=1;i<N;i++)setTimeout(()=>load(i),i*8);
  addEventListener('resize',size); size(); requestAnimationFrame(tick);
+})();
+</script>
+<aside id="vcard" class="off" aria-label="Studio video">
+ <video id="vcv" src="media/studio-card.mp4" muted loop playsinline preload="metadata"></video>
+ <button class="mu" id="vmu" type="button" aria-label="Unmute">&#128263;</button>
+ <button class="cl" id="vcl" type="button" aria-label="Close video">&#10005;</button>
+</aside>
+<script>
+(function(){const c=document.getElementById('vcard'),v=document.getElementById('vcv'),m=document.getElementById('vmu'),mach=document.getElementById('machine');let closed=false,shown=false;
+ m.onclick=()=>{v.muted=!v.muted;m.innerHTML=v.muted?'&#128263;':'&#128266;';m.setAttribute('aria-label',v.muted?'Unmute':'Mute');v.play().catch(()=>{})};
+ document.getElementById('vcl').onclick=()=>{closed=true;c.classList.add('off');v.pause();setTimeout(()=>c.remove(),500)};
+ /* the card pops up when the visitor reaches the machine (Craft) section, and hides again if they scroll back above it */
+ function check(){if(closed||!mach)return;const want=mach.getBoundingClientRect().top<innerHeight*.6;
+  if(want!==shown){shown=want;c.classList.toggle('off',!want);if(want)v.play().catch(()=>{});else v.pause()}}
+ addEventListener('scroll',check,{passive:true});addEventListener('resize',check);check();
 })();
 </script>
 </body></html>
