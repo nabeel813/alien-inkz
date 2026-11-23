@@ -401,7 +401,8 @@ finish(END);
 <section id="work"><i id="piercing" style="position:absolute;top:0;left:0"></i><div class="wk" id="wk">
  <div class="wk-bg" id="wkbg"></div>
  <div class="wk-head"><h2>Selected <span class="serif" style="color:var(--red);font-style:italic">work</span></h2>
-  <div class="wk-tg" id="wktg"><button type="button" data-m="t" class="on">Tattoo</button><button type="button" data-m="p">Piercing</button></div></div>
+  <div class="wk-tg" id="wktg"><button type="button" data-m="t" class="on">Tattoo</button><button type="button" data-m="p">Piercing</button></div>
+  <a class="btn wkwall" href="wall.html" data-h>View the Wall &rarr;</a></div>
  <div class="wk-ring"></div><div class="wk-row" id="wkrow"></div><div class="wk-pl" id="wkpl"></div>
  <div class="wk-nm" id="wknm"><b></b><small></small></div>
  <button class="wk-ar l" id="wkl" type="button" aria-label="Previous">&#8249;</button><button class="wk-ar r" id="wkr" type="button" aria-label="Next">&#8250;</button>
@@ -410,12 +411,7 @@ finish(END);
 
 <div class="grid rv" id="wkinfo"><div><b class="sm">Implant-grade</b><p>Titanium and gold jewelry, nickel-free.</p></div><div><b class="sm">Single-use</b><p>Sterile needles, never a piercing gun.</p></div><div><b class="sm">Check-up</b><p>Healing review and jewelry fitting.</p></div><div><b class="sm">Aftercare</b><p>A clear written aftercare plan.</p></div></div>
 
-<section id="styles">
- <div class="sbig" id="sbig">Ink that lasts</div>
- <div class="flwrap"><div class="fl" data-s="-.35" data-x="-30" data-y="-16" style="background:linear-gradient(180deg,#0000 35%,#000d),url(assets/floral.jpeg) center/cover"><b>Fine line</b><small>Delicate detail that ages gracefully.</small></div>
- <div class="fl" data-s=".2" data-x="0" data-y="12" style="background:linear-gradient(180deg,#0000 35%,#000d),url(assets/wolf.jpeg) center/cover"><b>Realism</b><small>Portraits and nature, shaded in layers.</small></div>
- <div class="fl" data-s="-.15" data-x="30" data-y="-10" style="background:linear-gradient(180deg,#0000 35%,#000d),url(assets/geometric.jpeg) center/cover"><b>Blackwork</b><small>Bold, graphic, unapologetic.</small></div></div>
-</section>
+
 
 <section id="trust"><h2 class="big rv">Trust is <span class="serif" style="font-style:italic;color:var(--red)">earned</span><br>one session at a time.</h2>
  <div class="grid rv"><div><b data-n="12">0</b><p>Years tattooing professionally</p></div><div><b data-n="3400" data-s="+">0</b><p>Pieces completed &amp; healed</p></div><div><b data-n="100" data-s="%">0</b><p>Single-use needles, hospital-grade sterilisation</p></div><div><b data-n="5" data-s="★">0</b><p>Average client rating</p></div></div>
@@ -533,7 +529,7 @@ function work(){const n=wkEls.length,r=wkSec.getBoundingClientRect(),p=cl(-r.top
 
 
 /* ====== floating style cards (parallax + mouse) ====== */
-function styles(){if(MOB.matches)return;const s=$('#styles'),r=s.getBoundingClientRect(),p=(r.top+r.height/2-VH/2)/VH;
+function styles(){if(MOB.matches||!$('#styles'))return;const s=$('#styles'),r=s.getBoundingClientRect(),p=(r.top+r.height/2-VH/2)/VH;
  $$('.fl').forEach(f=>{const sp=+f.dataset.s,x=+f.dataset.x,y=+f.dataset.y;
   f.style.transform=`translate(${x*4+(mx/innerWidth-.5)*-60}px,${y*4+p*sp*500}px) rotate(${sp*28+p*sp*20}deg) rotateY(${(mx/innerWidth-.5)*25}deg)`});
  $('#sbig').style.transform=`translateX(${p*-200}px)`}
