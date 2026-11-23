@@ -269,6 +269,19 @@ footer .mega{font:400 clamp(40px,16vw,300px)/.8 Georgia,serif;white-space:nowrap
  .wk-tx{left:20px;right:20px;width:auto;top:auto;bottom:11vh}
  #wkinfo{margin:0 20px 70px}
 }
+/* ===== WHATSAPP POPUP BUTTON ===== */
+#contact p a:hover{color:var(--red)}
+#wa{position:fixed;left:18px;bottom:28px;z-index:45}
+#wa .wab{width:58px;height:58px;border-radius:50%;border:0;background:#25d366;color:#fff;display:grid;place-items:center;box-shadow:0 10px 30px #000a,0 0 0 1px #ffffff22;transition:transform .3s var(--ease)}
+#wa .wab:hover{transform:scale(1.08)}
+#wa .wab svg{width:30px;height:30px;fill:currentColor}
+#wa .wap{position:absolute;left:0;bottom:72px;width:250px;padding:18px;border-radius:16px;background:#0f0d0cf2;border:1px solid #ffffff22;backdrop-filter:blur(14px);box-shadow:0 18px 50px #000b;opacity:0;visibility:hidden;transform:translateY(12px) scale(.96);transform-origin:0 100%;transition:opacity .3s,transform .3s var(--ease),visibility 0s .3s}
+#wa.open .wap{opacity:1;visibility:visible;transform:none;transition:opacity .3s,transform .3s var(--ease)}
+#wa .wap b{display:block;font:400 22px Georgia,serif}
+#wa .wap small{display:block;margin:6px 0 14px;color:var(--mute);letter-spacing:.12em;font-size:12px}
+#wa .wap a{display:block;text-align:center;text-decoration:none;background:#25d366;color:#fff;padding:12px;border-radius:30px;font-size:12px;letter-spacing:.16em;text-transform:uppercase}
+#wa .wax{position:absolute;top:8px;right:10px;background:none;border:0;color:var(--mute);font-size:16px;line-height:1}
+@media(max-width:820px){#wa{left:12px;bottom:calc(18px + env(safe-area-inset-bottom,0px))}#wa .wab{width:52px;height:52px}}
 </style><noscript><style>#loader{display:none}</style></noscript></head><body>
 <div id="loader" role="status" aria-label="Loading Alien Inkz" aria-busy="true"><div class="ld-glow"></div><div class="ld-stage"><div class="ld-dot"></div><div class="ld-word"></div></div></div>
 <script>
@@ -418,7 +431,7 @@ finish(END);
  <div class="grid rv" style="margin-top:0"><div><p>01 — Consultation</p><b class="sm">We design together</b></div><div><p>02 — Custom drawing</p><b class="sm">Approved before ink</b></div><div><p>03 — Session</p><b class="sm">Calm, clean, precise</b></div><div><p>04 — Aftercare</p><b class="sm">Free touch-up</b></div></div>
 </section>
 
-<section id="contact"><div class="rv"><h2 class="big">Let’s make<br>it <span class="serif" style="font-style:italic;color:var(--red)">permanent.</span></h2><p style="color:var(--mute);margin-top:24px;line-height:1.7">Tell me your idea, placement and size. I reply within 24 hours with a plan and a quote.</p><p style="margin-top:24px">Studio: YOUR CITY · +00 000 000 000<br>Instagram · WhatsApp · Email</p></div>
+<section id="contact"><div class="rv"><h2 class="big">Let’s make<br>it <span class="serif" style="font-style:italic;color:var(--red)">permanent.</span></h2><p style="color:var(--mute);margin-top:24px;line-height:1.7">Tell me your idea, placement and size. I reply within 24 hours with a plan and a quote.</p><p style="margin-top:24px">Studio: YOUR CITY · <a href="tel:+919048344413">+91 90483 44413</a><br><a href="https://www.instagram.com/alien.inkz/" target="_blank" rel="noopener">Instagram</a> · <a href="https://pin.it/5E9v0JIac" target="_blank" rel="noopener">Pinterest</a> · <a href="https://wa.me/919048344413" target="_blank" rel="noopener">WhatsApp</a> · <a href="mailto:Adarshlalu@gmail.com">Adarshlalu@gmail.com</a></p></div>
  <form class="rv" id="f"><input name="n" placeholder="Your name" required><input name="e" type="email" placeholder="Email" required>
  <select name="p"><option>Placement: Back</option><option>Placement: Chest / Front</option><option>Placement: Arm / Sleeve</option><option>Other</option></select>
  <textarea name="m" rows="4" placeholder="Describe your idea"></textarea><button class="btn red" data-h>Send request</button></form></section>
@@ -645,7 +658,7 @@ $$('.rv').forEach(e=>io.observe(e));$$('.stat').forEach(e=>io.observe(e));
 function cnt(c){if(c.done)return;c.done=1;const n=+c.dataset.n,s=c.dataset.s||'',t0=performance.now();
  (function f(t){const k=cl((t-t0)/1800);c.textContent=Math.round(n*(1-Math.pow(1-k,3)))+(k==1?s:'');k<1&&requestAnimationFrame(f)})(t0)}
 $('#f').onsubmit=e=>{e.preventDefault();const d=new FormData(e.target);
- location.href=`mailto:you@example.com?subject=Tattoo enquiry from ${d.get('n')}&body=${encodeURIComponent(d.get('m')+'\n\n'+d.get('p')+'\n'+d.get('e'))}`};
+ location.href=`mailto:Adarshlalu@gmail.com?subject=Tattoo enquiry from ${d.get('n')}&body=${encodeURIComponent(d.get('m')+'\n\n'+d.get('p')+'\n'+d.get('e'))}`};
 </script>
 <script>/* coming back from wall.html#... : the intro loader resets scroll, so jump to the requested section once it finishes */
 document.addEventListener('loader:done',()=>{if(location.hash.length>1){const t=document.querySelector(location.hash);t&&t.scrollIntoView({behavior:'instant'})}});</script><script>
@@ -675,6 +688,12 @@ document.addEventListener('loader:done',()=>{if(location.hash.length>1){const t=
  load(0); for(let i=1;i<N;i++)setTimeout(()=>load(i),i*8);
  addEventListener('resize',size); size(); requestAnimationFrame(tick);
 })();
+</script>
+<div id="wa"><div class="wap" id="wap" role="dialog" aria-label="WhatsApp"><button class="wax" id="wax" type="button" aria-label="Close">&#10005;</button><b>WhatsApp</b><small>+91 90483 44413</small><a href="https://wa.me/919048344413" target="_blank" rel="noopener">Start chat</a></div><button class="wab" id="wab" type="button" aria-label="Chat on WhatsApp" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg></button></div>
+<script>
+(function(){const w=document.getElementById('wa'),b=document.getElementById('wab'),set=o=>{w.classList.toggle('open',o);b.setAttribute('aria-expanded',o)};
+ b.onclick=()=>set(!w.classList.contains('open'));document.getElementById('wax').onclick=()=>set(false);
+ addEventListener('keydown',e=>{if(e.key==='Escape')set(false)})})();
 </script>
 <aside id="vcard" class="off" aria-label="Studio video">
  <video id="vcv" src="media/studio-card.mp4" muted loop playsinline preload="metadata"></video>
