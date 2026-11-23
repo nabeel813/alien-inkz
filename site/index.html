@@ -269,8 +269,24 @@ footer .mega{font:400 clamp(40px,16vw,300px)/.8 Georgia,serif;white-space:nowrap
  .wkwall{margin-left:0;padding:10px 18px}
  #wkinfo{margin:0 20px 70px}
 }
-@media(max-width:700px){.wk-col:nth-child(n+4){display:none}.wk-stage{left:-22%;width:145%;gap:12px}.wk-track{gap:12px}}
-@media(max-width:470px){.wk-col:nth-child(n+3){display:none}.wk-stage{left:-31%;width:165%}}
+@media(max-width:700px){
+ .wk-col:nth-child(n+4){display:none}
+ /* mobile: gentle tilt, stage fits the screen so cards are never cropped or oversized */
+ .wk-anim{perspective:none}
+ .wk-stage{top:-8%;left:4%;width:92%;height:118%;gap:10px;transform:rotateZ(3deg) translate3d(0,0,0)}
+ .wk-track{gap:10px}
+ .wk-card{border-radius:12px;box-shadow:0 8px 20px #000a}
+ .wk-cap{padding:10px 10px 11px}
+ .wk-cap b{font-size:14px;line-height:1.15}
+ .wk-cap small{font-size:8.5px;letter-spacing:.1em;display:block;margin-top:3px}
+}
+@media(max-width:560px){
+ .wk-col:nth-child(n+3){display:none}
+ .wk-stage{top:-6%;left:4%;width:92%;height:116%;gap:10px}
+ .wk-cap b{font-size:16px}
+ .wk-cap small{font-size:9px}
+}
+@media(hover:none){.wk-anim:hover .wk-track{animation-play-state:running}.wk.off .wk-track{animation-play-state:paused}.wk-card:hover{transform:none;border-color:#ffffff22}}
 @media(prefers-reduced-motion:reduce){.wk-track{animation:none}}
 /* ===== WHATSAPP POPUP BUTTON ===== */
 #contact p a:hover{color:var(--red)}
